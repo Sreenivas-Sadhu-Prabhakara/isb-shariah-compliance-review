@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: isb-shariah-compliance-review
+
+server:
+  port: 8080
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true   # /actuator/health/liveness + /readiness for K8s probes
+  info:
+    env:
+      enabled: true
+
+info:
+  isb:
+    serviceDomain: "Shariah Compliance Review"
+    businessArea: "Shariah Governance and Compliance"
+    businessDomain: "Shariah Governance"
+    functionalPattern: "Assess"
+    assetType: "Shariah Compliance Case"
+    controlRecord: "Shariah Compliance Case Assessment"
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      serviceDomain:
+        slidingWindowSize: 20
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
